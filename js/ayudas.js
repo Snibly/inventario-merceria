@@ -22,7 +22,8 @@ function abrirTeclado(idArticulo) {
     idArticuloTeclado = idArticulo;
     textoTeclado = '';
 
-    var titulo = articulo.color;
+    var idFamilia = buscarProducto(articulo.idProducto).idFamilia;
+    var titulo = describirColor(idFamilia, articulo.color);
     if (articulo.medida !== '') {
         titulo = articulo.medida + ' · ' + titulo;
     }

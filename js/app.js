@@ -18,6 +18,7 @@ $(document).ready(function () {
     pedirAlmacenamientoPermanente();
     prepararEventos();
     prepararEventosAyudas();
+    prepararBotonAtrasTablet();
     mostrarInicio();
     registrarFuncionamientoSinConexion();
 });
@@ -87,6 +88,32 @@ function repintarPantallaActual() {
 
 
 /* ============================================================
+   BOTÓN "ATRÁS" DE LA TABLET (el de Android)
+   Sin esto, con la app instalada, ese botón cierra la app.
+   Truco: dejamos siempre una "página" de más en el historial
+   del navegador. Al pulsar atrás, el navegador la quita, nosotros
+   vamos a la pantalla anterior y la volvemos a poner.
+   ============================================================ */
+
+function prepararBotonAtrasTablet() {
+    history.pushState({ app: 'inventario' }, '');
+
+    window.addEventListener('popstate', function () {
+        // Si hay una ventana abierta, el botón atrás la cierra
+        if ($('#tecladoNumerico').hasClass('visible')) {
+            cerrarTeclado();
+        } else if ($('#ventanaAviso').hasClass('visible')) {
+            cerrarAviso();
+        } else if (pantallaActual !== 'pantallaInicio') {
+            volverAtras();
+        }
+        // En la pantalla de inicio no hace nada: así no se cierra sin querer
+        history.pushState({ app: 'inventario' }, '');
+    });
+}
+
+
+/* ============================================================
    FUNCIONAR SIN INTERNET (cuando está instalada en la tablet)
    Solo funciona si la app se abre desde una dirección https://
    ============================================================ */
@@ -109,7 +136,8 @@ function cambiarPantalla(idPantalla, titulo) {
     $('#tituloPantalla').text(titulo);
     pantallaActual = idPantalla;
 
-    // En la pantalla de inicio no hace falta el botón Volver
+    // En la pantalla de inicio no hacen falta Volver ni la barra de abajo
+    $('#barraInferior').toggle(idPantalla !== 'pantallaInicio');
     if (idPantalla === 'pantallaInicio') {
         $('#botonVolver').css('visibility', 'hidden');
     } else {
@@ -257,7 +285,26 @@ function mostrarFamilia(idFamilia) {
     idFamiliaActual = idFamilia;
     idProductoActual = null;
     pintarProductos();
+    pintarCodigosColor();
     cambiarPantalla('pantallaFamilia', buscarFamilia(idFamilia).nombre);
+}
+
+// Lista de códigos de color de la familia (solo se ve en modo encargado)
+function pintarCodigosColor() {
+    var codigos = obtenerCodigosColor(idFamiliaActual);
+    var html = '';
+
+    if (codigos.length === 0) {
+        html = '<p class="ayuda">Todavía no hay códigos en esta familia.</p>';
+    }
+    for (var i = 0; i < codigos.length; i++) {
+        html += '<div class="fila-codigo">';
+        html += htmlMuestraColor(codigos[i].nombre);
+        html += '<span class="texto-codigo"><strong>' + escaparHtml(codigos[i].codigo) + '</strong> = ' + escaparHtml(codigos[i].nombre) + '</span>';
+        html += '<button type="button" class="boton boton-peligro boton-quitar-codigo" data-codigo="' + escaparHtml(codigos[i].codigo) + '">Quitar</button>';
+        html += '</div>';
+    }
+    $('#listaCodigosColor').html(html);
 }
 
 function pintarProductos() {
@@ -387,8 +434,25 @@ function pintarColores() {
     }
 }
 
+// Circulito con el color; con rayas si no conocemos ese nombre
+function htmlMuestraColor(nombreColor) {
+    var codigoColor = obtenerCodigoColor(nombreColor);
+    if (codigoColor === null) {
+        return '<span class="muestra-color muestra-desconocida"></span>';
+    }
+    return '<span class="muestra-color" style="background:' + codigoColor + '"></span>';
+}
+
 function htmlFilaArticulo(articulo) {
+    // Si el color es un código (701...) y la familia sabe qué color es,
+    // se muestra el nombre en grande y el código debajo
+    var nombreTraducido = traducirColor(idFamiliaActual, articulo.color);
     var nombreColor = articulo.color;
+    var referencia = '';
+    if (nombreTraducido !== null) {
+        nombreColor = nombreTraducido;
+        referencia = 'Ref. ' + articulo.color;
+    }
     if (nombreColor === '') {
         nombreColor = '—';
     }
@@ -400,17 +464,13 @@ function htmlFilaArticulo(articulo) {
         claseEstado = 'contado';
     }
 
-    // Circulito con el color (si conocemos el nombre)
-    var muestra = '<span class="muestra-color muestra-desconocida"></span>';
-    var codigoColor = obtenerCodigoColor(articulo.color);
-    if (codigoColor !== null) {
-        muestra = '<span class="muestra-color" style="background:' + codigoColor + '"></span>';
-    }
-
     var html = '';
     html += '<div class="fila-articulo ' + claseEstado + '" data-id="' + articulo.id + '">';
-    html += muestra;
+    html += htmlMuestraColor(nombreColor);
     html += '<span class="nombre-color">' + escaparHtml(nombreColor);
+    if (referencia !== '') {
+        html += '<small class="referencia">' + escaparHtml(referencia) + '</small>';
+    }
     if (articulo.cantidadAnterior !== null) {
         html += '<small class="anterior">Anterior: ' + articulo.cantidadAnterior + '</small>';
     }
@@ -645,6 +705,8 @@ function prepararEventos() {
 
     /* ----- Cabecera ----- */
     $('#botonVolver').on('click', volverAtras);
+    $('#botonAtrasInferior').on('click', volverAtras);
+    $('#botonInicioInferior').on('click', mostrarInicio);
     $('#botonHerramientas').on('click', mostrarHerramientas);
     $('#botonEntrarEncargado').on('click', entrarModoEncargado);
     $('#botonSalirEncargado').on('click', salirModoEncargado);
@@ -696,6 +758,29 @@ function prepararEventos() {
 
     $('#botonImprimirFamilia').on('click', function () {
         imprimirPlantilla('familia-' + idFamiliaActual, 5);
+    });
+
+    /* ----- Códigos de color de la familia ----- */
+    $('#formularioCodigoColor').on('submit', function (evento) {
+        evento.preventDefault();
+        var codigo = $('#campoCodigo').val().trim();
+        var nombreColor = $('#campoNombreCodigo').val().trim();
+        if (codigo === '' || nombreColor === '') {
+            alert('Escribe el código y el color.');
+            return;
+        }
+        ponerCodigoColor(idFamiliaActual, codigo, nombreColor);
+        $('#campoCodigo').val('').focus();
+        $('#campoNombreCodigo').val('');
+        pintarCodigosColor();
+    });
+
+    $('#listaCodigosColor').on('click', '.boton-quitar-codigo', function () {
+        var codigo = String($(this).data('codigo'));
+        if (confirm('¿Quitar el código ' + codigo + '?')) {
+            quitarCodigoColor(idFamiliaActual, codigo);
+            pintarCodigosColor();
+        }
     });
 
     /* ----- Productos ----- */

@@ -63,7 +63,9 @@ function obtenerFilasSeleccion(seleccion) {
     var articulos = [];
 
     if (seleccion === 'todo') {
-        articulos = datos.articulos;
+        for (var f = 0; f < datos.familias.length; f++) {
+            articulos = articulos.concat(obtenerArticulosDeFamilia(datos.familias[f].id));
+        }
     } else if (seleccion.indexOf('familia-') === 0) {
         var idFamilia = Number(seleccion.replace('familia-', ''));
         articulos = obtenerArticulosDeFamilia(idFamilia);
@@ -81,7 +83,7 @@ function obtenerFilasSeleccion(seleccion) {
             familia: familia.nombre,
             producto: producto.nombre,
             medida: articulos[i].medida,
-            color: articulos[i].color,
+            color: describirColor(familia.id, articulos[i].color),
             cantidad: articulos[i].cantidad,
             cantidadAnterior: articulos[i].cantidadAnterior
         });

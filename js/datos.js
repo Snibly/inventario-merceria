@@ -4,7 +4,8 @@
    Los datos se guardan en el navegador de la tablet (localStorage).
 
    Estructura:
-     familias:  { id, nombre }
+     familias:  { id, nombre, codigosColor }
+                codigosColor = { '701': 'Negro', '501': 'Rojo', ... }
      productos: { id, idFamilia, nombre }
      articulos: { id, idProducto, medida, color,
                   cantidad, cantidadAnterior }
@@ -34,6 +35,11 @@ function completarDatos() {
     }
     if (datos.ajustes.fechaUltimaCopia === undefined) {
         datos.ajustes.fechaUltimaCopia = null;
+    }
+    for (var i = 0; i < datos.familias.length; i++) {
+        if (!datos.familias[i].codigosColor) {
+            datos.familias[i].codigosColor = {};
+        }
     }
 }
 
@@ -89,7 +95,7 @@ function buscarPorId(lista, id) {
 /* ---------- Familias ---------- */
 
 function crearFamilia(nombre) {
-    var familia = { id: nuevoId(), nombre: nombre };
+    var familia = { id: nuevoId(), nombre: nombre, codigosColor: {} };
     datos.familias.push(familia);
     guardarDatos();
     return familia;
@@ -161,10 +167,26 @@ function buscarArticulo(id) {
     return buscarPorId(datos.articulos, id);
 }
 
+// Compara dos textos teniendo en cuenta los números:
+// "12cm" va antes que "14cm", y "9" antes que "10".
+// Sin números, ordena alfabéticamente sin distinguir mayúsculas ni tildes.
+function compararTextos(textoA, textoB) {
+    return textoA.localeCompare(textoB, 'es', { numeric: true, sensitivity: 'base' });
+}
+
+// Artículos de un producto ordenados por medida y, dentro, por color
 function obtenerArticulosDeProducto(idProducto) {
-    return datos.articulos.filter(function (articulo) {
+    var articulos = datos.articulos.filter(function (articulo) {
         return articulo.idProducto === idProducto;
     });
+    articulos.sort(function (articuloA, articuloB) {
+        var porMedida = compararTextos(articuloA.medida, articuloB.medida);
+        if (porMedida !== 0) {
+            return porMedida;
+        }
+        return compararTextos(articuloA.color, articuloB.color);
+    });
+    return articulos;
 }
 
 function obtenerArticulosDeFamilia(idFamilia) {
@@ -353,6 +375,54 @@ function comprobarCodigo(codigo) {
 function cambiarCodigoEncargado(codigoNuevo) {
     datos.ajustes.codigoEncargado = codigoNuevo;
     guardarDatos();
+}
+
+
+/* ---------- Códigos de color (cada familia tiene los suyos) ---------- */
+
+function ponerCodigoColor(idFamilia, codigo, nombreColor) {
+    var familia = buscarFamilia(idFamilia);
+    familia.codigosColor[codigo] = nombreColor;
+    guardarDatos();
+}
+
+function quitarCodigoColor(idFamilia, codigo) {
+    var familia = buscarFamilia(idFamilia);
+    delete familia.codigosColor[codigo];
+    guardarDatos();
+}
+
+// Lista ordenada: [ { codigo: '501', nombre: 'Rojo' }, ... ]
+function obtenerCodigosColor(idFamilia) {
+    var familia = buscarFamilia(idFamilia);
+    var lista = [];
+    for (var codigo in familia.codigosColor) {
+        lista.push({ codigo: codigo, nombre: familia.codigosColor[codigo] });
+    }
+    lista.sort(function (a, b) {
+        return compararTextos(a.codigo, b.codigo);
+    });
+    return lista;
+}
+
+// Si el color es un código conocido en esa familia, devuelve su nombre.
+// Si no, devuelve null.  traducirColor(1, '701') -> 'Negro'
+function traducirColor(idFamilia, color) {
+    var familia = buscarFamilia(idFamilia);
+    var codigo = color.trim();
+    if (codigo !== '' && familia.codigosColor[codigo]) {
+        return familia.codigosColor[codigo];
+    }
+    return null;
+}
+
+// Texto completo para hojas y Excel: "701 · Negro", o el color tal cual
+function describirColor(idFamilia, color) {
+    var nombre = traducirColor(idFamilia, color);
+    if (nombre === null) {
+        return color;
+    }
+    return color + ' · ' + nombre;
 }
 
 
