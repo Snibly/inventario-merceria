@@ -1,0 +1,671 @@
+/* ============================================================
+   estilos.css
+   Pensado para tablet: botones grandes y fáciles de pulsar.
+   ============================================================ */
+
+/* ---------- Colores principales (cámbialos aquí) ----------
+   Azul principal:  #2f5d8a
+   Verde contado:   #2e7d32  / fondo #e8f5e9
+   Ámbar sin contar:#b26a00  / fondo #fff8e1
+   Rojo peligro:    #c62828
+   ------------------------------------------------------------ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    background: #f2f2f2;
+    color: #222222;
+}
+
+.oculto {
+    display: none;
+}
+
+
+/* ---------- Modo sencillo / modo encargado ---------- */
+
+.modo-sencillo .solo-encargado {
+    display: none !important;
+}
+
+.modo-encargado .solo-sencillo {
+    display: none !important;
+}
+
+.aviso-encargado {
+    padding: 8px 16px;
+    font-size: 16px;
+    text-align: center;
+    color: #5d4000;
+    background: #ffe082;
+}
+
+.cabecera-derecha {
+    display: flex;
+    gap: 8px;
+    min-width: 110px;
+    justify-content: flex-end;
+}
+
+/* Frase grande que dice qué hay que hacer en cada pantalla */
+.instruccion {
+    margin: 4px 0 16px 0;
+    font-size: 26px;
+    font-weight: bold;
+    color: #2f5d8a;
+}
+
+.pie-inicio {
+    margin-top: 60px;
+    text-align: right;
+}
+
+/* Botón pequeño y poco llamativo para entrar en modo encargado */
+.boton-discreto {
+    padding: 8px 14px;
+    font-size: 14px;
+    color: #999999;
+    background: transparent;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+
+/* Se escribe ".boton.boton-imprimir" para que gane a los estilos de ".boton" */
+.boton.boton-imprimir {
+    width: 100%;
+    margin-top: 24px;
+    min-height: 64px;
+    font-size: 20px;
+}
+
+.boton.boton-falta-color {
+    width: 100%;
+    margin-top: 24px;
+    min-height: 64px;
+    font-size: 20px;
+    border-style: dashed;
+}
+
+
+/* ---------- Cabecera ---------- */
+
+.cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #2f5d8a;
+    color: #ffffff;
+}
+
+.cabecera h1 {
+    margin: 0;
+    font-size: 22px;
+    text-align: center;
+    flex: 1;
+}
+
+.boton-cabecera {
+    min-height: 48px;
+    padding: 0 16px;
+    font-size: 17px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.migas {
+    padding: 10px 16px;
+    font-size: 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #dddddd;
+}
+
+.migas a {
+    color: #2f5d8a;
+}
+
+
+/* ---------- Contenido general ---------- */
+
+.contenido {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.pantalla {
+    display: none;
+}
+
+.vacio {
+    padding: 24px;
+    text-align: center;
+    color: #666666;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.ayuda {
+    font-size: 15px;
+    color: #666666;
+}
+
+
+/* ---------- Botones ---------- */
+
+.boton {
+    display: inline-block;
+    min-height: 52px;
+    padding: 12px 20px;
+    font-size: 17px;
+    color: #2f5d8a;
+    background: #ffffff;
+    border: 2px solid #2f5d8a;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton-principal {
+    color: #ffffff;
+    background: #2f5d8a;
+}
+
+.boton-peligro {
+    color: #c62828;
+    border-color: #c62828;
+}
+
+.acciones-pantalla,
+.fila-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+
+/* ---------- Tarjetas de familias y productos ---------- */
+
+.rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 140px;
+    padding: 18px;
+    font-size: 18px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #d0d0d0;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.tarjeta:active {
+    background: #e3ecf5;
+}
+
+.tarjeta-nombre {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.tarjeta-detalle {
+    color: #666666;
+    font-size: 15px;
+}
+
+
+/* ---------- Barra de progreso ---------- */
+
+.progreso-texto {
+    font-size: 17px;
+    color: #8a5a00;
+}
+
+.progreso-completo {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.barra {
+    width: 100%;
+    height: 12px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.barra-relleno {
+    height: 100%;
+    background: #2e7d32;
+}
+
+.resumen {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+
+/* ---------- Formularios de alta ---------- */
+
+.formulario-alta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 16px;
+    background: #ffffff;
+    border: 2px dashed #b0c4d8;
+    border-radius: 12px;
+}
+
+.formulario-alta h3 {
+    margin: 0;
+}
+
+.formulario-alta label,
+.bloque-herramienta label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 16px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 18px;
+    border: 1px solid #aaaaaa;
+    border-radius: 8px;
+}
+
+
+/* ---------- Recuento: medidas y colores ---------- */
+
+.grupo-medida {
+    margin-bottom: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.titulo-medida {
+    margin: 0;
+    padding: 12px 16px;
+    font-size: 20px;
+    color: #ffffff;
+    background: #4a7aa8;
+}
+
+.titulo-medida small {
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.fila-articulo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dddddd;
+    transition: background-color 0.3s;
+}
+
+/* Destello al pulsar + o − */
+.fila-articulo.recien-cambiado {
+    background: #a5d6a7 !important;
+}
+
+.fila-articulo.sin-contar {
+    background: #fff8e1;
+}
+
+.fila-articulo.contado {
+    background: #e8f5e9;
+}
+
+.nombre-color {
+    flex: 1;
+    font-size: 28px;
+}
+
+.anterior {
+    display: block;
+    font-size: 14px;
+    color: #777777;
+}
+
+.boton-cantidad {
+    width: 80px;
+    height: 80px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #2f5d8a;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.boton-restar {
+    background: #7a8c9e;
+}
+
+/* El número de la cantidad es un botón que abre el teclado */
+.campo-cantidad {
+    width: 110px;
+    min-height: 80px;
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    color: #222222;
+    background: #ffffff;
+    border: 2px solid #aaaaaa;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.boton-quitar-articulo {
+    display: none;
+    min-height: 48px;
+    padding: 0 14px;
+    font-size: 16px;
+    color: #ffffff;
+    background: #c62828;
+    border: none;
+    border-radius: 8px;
+}
+
+/* En modo edición se muestran los botones de quitar */
+.editando .boton-quitar-articulo {
+    display: inline-block;
+}
+
+
+/* Circulito con el color al lado del nombre */
+.muestra-color {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #888888;
+}
+
+/* Color que no está en la lista de colores.js */
+.muestra-desconocida {
+    background: transparent;
+    border-style: dashed;
+    border-color: #bbbbbb;
+}
+
+/* Fila con el resumen y el botón Deshacer */
+.barra-recuento {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 16px;
+}
+
+.barra-recuento .resumen {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.boton.boton-deshacer {
+    min-width: 170px;
+    font-size: 20px;
+}
+
+.boton.boton-deshacer:disabled {
+    color: #bbbbbb;
+    border-color: #dddddd;
+}
+
+.sin-contar .campo-cantidad {
+    color: #b0b0b0;
+}
+
+
+/* ---------- Ventanas por encima de todo (teclado y avisos) ---------- */
+
+.capa-oscura {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.capa-oscura.visible {
+    display: flex;
+}
+
+.ventana {
+    width: 100%;
+    max-width: 460px;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 16px;
+}
+
+.teclado-titulo {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.teclado-ahora {
+    margin-top: 4px;
+    font-size: 17px;
+    color: #666666;
+    text-align: center;
+}
+
+.teclado-pantalla {
+    margin: 14px 0;
+    padding: 10px;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    background: #f2f2f2;
+    border-radius: 10px;
+}
+
+.teclado-vacio {
+    font-size: 22px;
+    font-weight: normal;
+    color: #999999;
+}
+
+.teclado-teclas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.tecla {
+    height: 76px;
+    font-size: 34px;
+    font-weight: bold;
+    color: #222222;
+    background: #e8eef4;
+    border: 1px solid #c5d3e0;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.tecla:active {
+    background: #c5d3e0;
+}
+
+.tecla-borrar {
+    font-size: 22px;
+    color: #c62828;
+}
+
+.teclado-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.teclado-botones .boton {
+    flex: 1;
+    min-height: 70px;
+    font-size: 22px;
+}
+
+.boton.boton-aceptar {
+    color: #ffffff;
+    background: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.ventana-aviso {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+}
+
+.aviso-titulo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.aviso-texto {
+    font-size: 20px;
+    color: #444444;
+    white-space: pre-line;   /* respeta los saltos de línea del texto */
+}
+
+.ventana-aviso .boton {
+    min-height: 70px;
+    font-size: 22px;
+}
+
+
+/* Botones "Medida anterior / siguiente" debajo de los colores */
+.navegacion-medidas {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.navegacion-medidas .boton {
+    flex: 1;
+    min-height: 80px;
+    font-size: 22px;
+}
+
+
+/* ---------- Herramientas ---------- */
+
+.bloque-herramienta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.bloque-herramienta h3 {
+    margin: 0;
+}
+
+.bloque-herramienta .ayuda {
+    margin: 0;
+}
+
+
+/* ---------- Plantilla de impresión ---------- */
+
+#zonaImpresion {
+    display: none;
+}
+
+@media print {
+    .cabecera,
+    .migas,
+    .contenido {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff;
+        font-size: 12pt;
+    }
+
+    #zonaImpresion {
+        display: block;
+    }
+
+    #zonaImpresion h1 {
+        font-size: 18pt;
+        margin: 0 0 6px 0;
+    }
+
+    .datos-hoja {
+        margin: 0 0 12px 0;
+    }
+
+    .tabla-plantilla {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-plantilla th,
+    .tabla-plantilla td {
+        height: 28px;
+        padding: 4px 6px;
+        border: 1px solid #000000;
+        text-align: left;
+    }
+
+    .tabla-plantilla th {
+        background: #e6e6e6;
+    }
+
+    .columna-cantidad {
+        width: 90px;
+    }
+
+    /* La cabecera de la tabla se repite en cada hoja */
+    .tabla-plantilla thead {
+        display: table-header-group;
+    }
+
+    .tabla-plantilla tr {
+        page-break-inside: avoid;
+    }
+}
