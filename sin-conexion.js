@@ -8,7 +8,7 @@
    tablet descargue los archivos nuevos.
    ============================================================ */
 
-var VERSION = 'inventario-v6';
+var VERSION = 'inventario-v7';
 
 var ARCHIVOS = [
     './',

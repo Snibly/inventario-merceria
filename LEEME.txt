@@ -102,3 +102,12 @@ INVENTARIO MERCERÍA - INSTRUCCIONES
     debajo. En las hojas impresas y en Excel sale "701 · Negro".
   - Cada familia tiene sus propios códigos (el 501 de cremalleras puede ser
     distinto del 501 de cintas).
+
+
+9. MOVERSE POR LA APP
+---------------------
+  - Abajo hay siempre dos botones grandes: "‹ Atrás" y "⌂ Inicio"
+    (en la pantalla de inicio no salen porque no hacen falta).
+  - El botón "atrás" de la propia tablet también vuelve a la pantalla anterior
+    y cierra el teclado o los avisos si están abiertos. En la pantalla de
+    inicio no hace nada, para que la app no se cierre sin querer.
