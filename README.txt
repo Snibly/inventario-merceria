@@ -1,0 +1,92 @@
+INVENTARIO MERCERÍA - INSTRUCCIONES
+===================================
+
+1. QUÉ HAY EN ESTA CARPETA
+--------------------------
+  index.html        Las pantallas de la app
+  css/estilos.css   Colores, tamaños de letra y botones
+  js/datos.js       Guardar y leer los datos en la tablet
+  js/plantillas.js  Imprimir hojas, exportar a Excel, copias de seguridad
+  js/colores.js     Lista de nombres de color y su muestra (añade los que falten)
+  js/ayudas.js      Teclado numérico, deshacer, avisos y pantalla encendida
+  js/app.js         Qué hace cada pantalla y cada botón
+  js/jquery.min.js  Librería jQuery (no hace falta tocarla)
+  manifest.json     Nombre e icono de la app al instalarla
+  sin-conexion.js   Hace que la app se abra sin internet
+  iconos/           Icono de la app
+
+
+2. LOS DOS MODOS
+----------------
+  MODO SENCILLO (el que se abre siempre)
+    Solo se ve: Familia -> Tipo -> Medida -> Colores, botones - y +,
+    "Siguiente medida", "Imprimir hoja" y "Falta un color".
+    No se puede borrar ni cambiar nada.
+
+  MODO ENCARGADO
+    Botón pequeño "Encargado" abajo del todo en la pantalla de inicio.
+    Código inicial: 1234  (cámbialo en Herramientas > Código del encargado).
+    Desde aquí se crean familias, tipos, medidas y colores, se borra,
+    se exporta a Excel y se hacen copias de seguridad.
+    Pulsa "Salir" arriba a la derecha para volver al modo sencillo.
+
+
+3. INSTALARLA EN LA TABLET (como una app con su icono)
+------------------------------------------------------
+  Para instalarla, la app tiene que estar en una dirección https://.
+  Una forma gratuita es GitHub Pages:
+
+  a) Crea una cuenta en github.com (si no tienes).
+  b) Crea un repositorio nuevo, por ejemplo "inventario-merceria" (público).
+  c) Botón "Add file" > "Upload files" y arrastra TODO el contenido
+     de esta carpeta (index.html, css, js, iconos, manifest.json...).
+     Pulsa "Commit changes".
+  d) En el repositorio: Settings > Pages > Branch: "main", carpeta "/ (root)" > Save.
+  e) Al cabo de un minuto tendrás una dirección del tipo:
+        https://TU-USUARIO.github.io/inventario-merceria/
+  f) En la tablet, abre esa dirección con Chrome.
+     Menú (los tres puntos) > "Instalar aplicación" o "Añadir a pantalla de inicio".
+  g) Aparece el icono "Inventario". A partir de ahí se abre desde el icono,
+     a pantalla completa, y funciona sin internet.
+
+  Nota: el repositorio es público, pero solo contiene el programa.
+  Los datos del inventario NUNCA se suben: se quedan en la tablet.
+
+
+4. IMPRIMIR
+-----------
+  Los botones "Imprimir hoja" usan el sistema de impresión de Android.
+  Antes, en la tablet: Ajustes > Dispositivos conectados > Impresión,
+  y activa el servicio de tu impresora (HP, Epson, Canon, Brother...)
+  o "Servicio de impresión predeterminado" si es una impresora wifi.
+  También se puede elegir "Guardar como PDF".
+
+
+5. COPIAS DE SEGURIDAD (IMPORTANTE)
+-----------------------------------
+  Los datos solo están en la tablet, dentro de Chrome.
+  Si alguien borra los datos de Chrome o desinstala la app, se pierden.
+  Entra de vez en cuando en Encargado > Herramientas > "Descargar copia".
+  El archivo .json se guarda en Descargas; pásalo también a otro sitio.
+
+
+6. SI CAMBIAS EL CÓDIGO
+-----------------------
+  Cada vez que modifiques algún archivo y lo vuelvas a subir a GitHub,
+  abre sin-conexion.js y sube el número de VERSION
+  (inventario-v1 -> inventario-v2...). Si no, la tablet seguirá usando
+  la versión antigua que tiene guardada.
+  Si añades un archivo nuevo, añádelo también a la lista ARCHIVOS.
+
+
+7. AYUDAS AL CONTAR
+-------------------
+  - Al tocar el número de un color se abre un teclado grande para escribir
+    cantidades altas sin tener que pulsar + muchas veces.
+  - "Deshacer" (arriba a la derecha) anula los últimos cambios de esa medida.
+  - Al lado de cada color sale un circulito con el color. Si sale un círculo
+    vacío con rayas, ese nombre no está en js/colores.js: añádelo allí.
+  - Al terminar una medida sale un aviso grande para pasar a la siguiente.
+  - Mientras se cuenta, la pantalla no se apaga (solo en la app instalada).
+  - Al completar todo el inventario se descarga sola una copia de seguridad.
+    Al entrar como encargado, la app avisa si hace 7 días o más sin copia.

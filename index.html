@@ -69,6 +69,21 @@
                 <button type="submit" class="boton boton-principal">+ Añadir tipo</button>
             </form>
 
+            <div class="bloque-herramienta bloque-codigos solo-encargado">
+                <h3>Códigos de color de esta familia</h3>
+                <p class="ayuda">
+                    Si en esta familia los colores se apuntan con un número (701, 501...),
+                    escribe aquí qué color es cada uno. Al contar se verá el nombre del color
+                    con su muestra, y el código debajo.
+                </p>
+                <div id="listaCodigosColor"></div>
+                <form id="formularioCodigoColor" class="fila-formulario">
+                    <input type="text" id="campoCodigo" placeholder="Código (ej.: 701)">
+                    <input type="text" id="campoNombreCodigo" placeholder="Color (ej.: Negro)">
+                    <button type="submit" class="boton boton-principal">+ Añadir</button>
+                </form>
+            </div>
+
             <div class="acciones-pantalla solo-encargado">
                 <button type="button" id="botonRenombrarFamilia" class="boton">Cambiar nombre</button>
                 <button type="button" id="botonBorrarFamilia" class="boton boton-peligro">Borrar familia</button>
