@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inventario Mercería</title>
+
+    <!-- Para poder instalarla en la tablet como si fuera una aplicación -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2f5d8a">
+    <link rel="icon" href="iconos/icono-192.png">
+    <link rel="apple-touch-icon" href="iconos/icono-192.png">
+
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<!--
+    El <body> lleva la clase "modo-sencillo" o "modo-encargado".
+    Los elementos con clase "solo-encargado" solo se ven en modo encargado.
+    Los elementos con clase "solo-sencillo" solo se ven en modo sencillo.
+-->
+<body class="modo-sencillo">
+
+    <!-- ===== CABECERA (siempre visible) ===== -->
+    <header class="cabecera">
+        <button type="button" id="botonVolver" class="boton-cabecera">&#8249; Volver</button>
+        <h1 id="tituloPantalla">Inventario</h1>
+        <div class="cabecera-derecha">
+            <button type="button" id="botonHerramientas" class="boton-cabecera solo-encargado">Herramientas</button>
+            <button type="button" id="botonSalirEncargado" class="boton-cabecera solo-encargado">Salir</button>
+        </div>
+    </header>
+
+    <!-- Aviso visible mientras se está en modo encargado -->
+    <div class="aviso-encargado solo-encargado">Modo encargado: puedes añadir, cambiar y borrar</div>
+
+    <!-- Ruta: Inicio > Familia > Tipo > Medida -->
+    <nav id="migas" class="migas"></nav>
+
+    <main class="contenido">
+
+        <!-- ===== PANTALLA 1: FAMILIAS ===== -->
+        <section id="pantallaInicio" class="pantalla">
+            <p class="instruccion">Toca lo que vas a contar</p>
+
+            <div id="listaFamilias" class="rejilla"></div>
+
+            <form id="formularioNuevaFamilia" class="formulario-alta solo-encargado">
+                <h3>Nueva familia</h3>
+                <input type="text" id="campoNombreFamilia" placeholder="Ej.: Cremalleras, Bies, Hilos, Botones...">
+                <button type="submit" class="boton boton-principal">+ Añadir familia</button>
+            </form>
+
+            <div class="pie-inicio solo-sencillo">
+                <button type="button" id="botonEntrarEncargado" class="boton-discreto">Encargado</button>
+            </div>
+        </section>
+
+        <!-- ===== PANTALLA 2: TIPOS DE UNA FAMILIA ===== -->
+        <section id="pantallaFamilia" class="pantalla">
+            <p class="instruccion">¿Qué tipo?</p>
+
+            <div id="listaProductos" class="rejilla"></div>
+
+            <button type="button" id="botonImprimirFamilia" class="boton boton-imprimir">Imprimir hoja de toda la familia</button>
+
+            <form id="formularioNuevoProducto" class="formulario-alta solo-encargado">
+                <h3>Nuevo tipo en esta familia</h3>
+                <input type="text" id="campoNombreProducto" placeholder="Ej.: Normales, Invisibles, Metálicas...">
+                <button type="submit" class="boton boton-principal">+ Añadir tipo</button>
+            </form>
+
+            <div class="acciones-pantalla solo-encargado">
+                <button type="button" id="botonRenombrarFamilia" class="boton">Cambiar nombre</button>
+                <button type="button" id="botonBorrarFamilia" class="boton boton-peligro">Borrar familia</button>
+            </div>
+        </section>
+
+        <!-- ===== PANTALLA 3: MEDIDAS DE UN TIPO ===== -->
+        <section id="pantallaProducto" class="pantalla">
+            <p class="instruccion">¿Qué medida?</p>
+
+            <div id="resumenProducto" class="resumen"></div>
+
+            <div id="listaMedidas" class="rejilla"></div>
+
+            <button type="button" id="botonImprimirProducto" class="boton boton-imprimir">Imprimir hoja de este tipo</button>
+
+            <form id="formularioNuevosArticulos" class="formulario-alta solo-encargado">
+                <h3>Añadir medidas y colores</h3>
+                <label>
+                    Medidas (separadas por comas)
+                    <input type="text" id="campoMedidas" placeholder="Ej.: 10 cm, 15 cm, 20 cm">
+                </label>
+                <label>
+                    Colores (separados por comas)
+                    <input type="text" id="campoColores" placeholder="Ej.: Negro, Blanco, Rojo">
+                </label>
+                <button type="submit" class="boton boton-principal">+ Crear artículos</button>
+                <p class="ayuda">
+                    Se crea un artículo por cada medida combinada con cada color.
+                    Puedes dejar vacío uno de los dos campos. Las combinaciones que ya existan no se repiten.
+                </p>
+            </form>
+
+            <div class="acciones-pantalla solo-encargado">
+                <button type="button" id="botonRenombrarProducto" class="boton">Cambiar nombre</button>
+                <button type="button" id="botonBorrarProducto" class="boton boton-peligro">Borrar tipo</button>
+            </div>
+        </section>
+
+        <!-- ===== PANTALLA 4: COLORES DE UNA MEDIDA (aquí se cuenta) ===== -->
+        <section id="pantallaColores" class="pantalla">
+            <div class="barra-recuento">
+                <div id="resumenMedida" class="resumen"></div>
+                <button type="button" id="botonDeshacer" class="boton boton-deshacer">&#8630; Deshacer</button>
+            </div>
+
+            <div id="listaArticulos" class="grupo-medida"></div>
+
+            <div class="navegacion-medidas">
+                <button type="button" id="botonMedidaAnterior" class="boton">&#8249; Medida anterior</button>
+                <button type="button" id="botonMedidaSiguiente" class="boton boton-principal">Siguiente medida &#8250;</button>
+                <button type="button" id="botonTerminarTipo" class="boton boton-principal">Terminado &#10003;</button>
+            </div>
+
+            <button type="button" id="botonFaltaColor" class="boton boton-falta-color">+ Falta un color</button>
+
+            <div class="acciones-pantalla solo-encargado">
+                <button type="button" id="botonModoEdicion" class="boton">Quitar colores</button>
+                <button type="button" id="botonRenombrarMedida" class="boton">Cambiar nombre de la medida</button>
+            </div>
+        </section>
+
+        <!-- ===== PANTALLA 5: HERRAMIENTAS (solo encargado) ===== -->
+        <section id="pantallaHerramientas" class="pantalla">
+
+            <div class="bloque-herramienta">
+                <h3>Plantillas para contar a mano</h3>
+                <label>
+                    ¿De qué?
+                    <select id="selectorPlantilla"></select>
+                </label>
+                <label>
+                    Filas en blanco al final (para artículos nuevos)
+                    <input type="number" id="campoFilasBlanco" value="5" min="0" max="50">
+                </label>
+                <div class="fila-botones">
+                    <button type="button" id="botonImprimirPlantilla" class="boton boton-principal">Imprimir / guardar PDF</button>
+                    <button type="button" id="botonDescargarPlantillaCsv" class="boton">Descargar para Excel (CSV)</button>
+                </div>
+            </div>
+
+            <div class="bloque-herramienta">
+                <h3>Resultado del inventario</h3>
+                <p class="ayuda">Descarga todos los recuentos en un archivo que se abre con Excel.</p>
+                <button type="button" id="botonExportarRecuento" class="boton boton-principal">Descargar recuento (CSV)</button>
+            </div>
+
+            <div class="bloque-herramienta">
+                <h3>Empezar un inventario nuevo</h3>
+                <p class="ayuda">
+                    Pone todas las cantidades a "sin contar". La cantidad actual se guarda como
+                    "anterior" para poder comparar. Los artículos no se borran.
+                    Antes se descarga automáticamente una copia de seguridad.
+                </p>
+                <button type="button" id="botonNuevoInventario" class="boton">Empezar inventario nuevo</button>
+            </div>
+
+            <div class="bloque-herramienta">
+                <h3>Copia de seguridad</h3>
+                <p class="ayuda">
+                    Los datos solo están en esta tablet. Descarga una copia de vez en cuando
+                    por si se borra el navegador. Se hace sola al completar un inventario,
+                    y te avisaremos si pasa más de una semana sin hacer ninguna.
+                </p>
+                <p id="textoUltimaCopia" class="ayuda"></p>
+                <div class="fila-botones">
+                    <button type="button" id="botonDescargarCopia" class="boton boton-principal">Descargar copia</button>
+                    <label class="boton">
+                        Restaurar copia
+                        <input type="file" id="campoArchivoCopia" accept=".json" class="oculto">
+                    </label>
+                </div>
+            </div>
+
+            <div class="bloque-herramienta">
+                <h3>Código del encargado</h3>
+                <p class="ayuda">Código de 4 cifras para entrar en este modo. Al principio es 1234.</p>
+                <button type="button" id="botonCambiarCodigo" class="boton">Cambiar código</button>
+            </div>
+
+            <div class="bloque-herramienta">
+                <h3>Borrar todo</h3>
+                <button type="button" id="botonBorrarTodo" class="boton boton-peligro">Borrar todos los datos</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== TECLADO NUMÉRICO (aparece al tocar una cantidad) ===== -->
+    <div id="tecladoNumerico" class="capa-oscura">
+        <div class="ventana ventana-teclado">
+            <div id="tecladoTitulo" class="teclado-titulo"></div>
+            <div id="tecladoAhora" class="teclado-ahora"></div>
+            <div id="tecladoPantalla" class="teclado-pantalla"></div>
+            <div class="teclado-teclas">
+                <button type="button" class="tecla" data-tecla="1">1</button>
+                <button type="button" class="tecla" data-tecla="2">2</button>
+                <button type="button" class="tecla" data-tecla="3">3</button>
+                <button type="button" class="tecla" data-tecla="4">4</button>
+                <button type="button" class="tecla" data-tecla="5">5</button>
+                <button type="button" class="tecla" data-tecla="6">6</button>
+                <button type="button" class="tecla" data-tecla="7">7</button>
+                <button type="button" class="tecla" data-tecla="8">8</button>
+                <button type="button" class="tecla" data-tecla="9">9</button>
+                <button type="button" class="tecla tecla-borrar" data-tecla="borrar">&#9003;</button>
+                <button type="button" class="tecla" data-tecla="0">0</button>
+                <button type="button" class="tecla tecla-borrar" data-tecla="todo">Borrar</button>
+            </div>
+            <div class="teclado-botones">
+                <button type="button" id="tecladoCancelar" class="boton">Cancelar</button>
+                <button type="button" id="tecladoAceptar" class="boton boton-aceptar">Aceptar &#10003;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== VENTANA DE AVISO GRANDE (medida terminada, etc.) ===== -->
+    <div id="ventanaAviso" class="capa-oscura">
+        <div class="ventana ventana-aviso">
+            <div id="avisoTitulo" class="aviso-titulo"></div>
+            <div id="avisoTexto" class="aviso-texto"></div>
+            <button type="button" id="avisoBotonPrincipal" class="boton boton-aceptar"></button>
+            <button type="button" id="avisoBotonSecundario" class="boton"></button>
+        </div>
+    </div>
+
+    <!-- Aquí se dibuja la plantilla justo antes de imprimir -->
+    <div id="zonaImpresion"></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/datos.js"></script>
+    <script src="js/colores.js"></script>
+    <script src="js/plantillas.js"></script>
+    <script src="js/ayudas.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
